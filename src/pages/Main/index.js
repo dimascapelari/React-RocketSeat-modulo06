@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { FaGithubAlt, FaPlus, FaSpinner } from "react-icons/fa";
 import { Container, Form, SubmitButton, List } from "./styles";
 import api from "../../services/api";
+import { Link } from "react-router-dom";
 
 export default class Main extends Component {
   state = {
@@ -10,6 +11,23 @@ export default class Main extends Component {
     repositories: [],
     loading: false,
   };
+
+  // Carregar os dados do localStorage
+  componentDidMount() {
+    const repositories = localStorage.getItem("repositories");
+
+    if (repositories) {
+      this.setState({ repositories: JSON.parse(repositories) });
+    }
+  }
+
+  // Salvar os dados do localStorage
+  componentDidUpdate(_, prevState) {
+    const { repositories } = this.state;
+    if (prevState.repositories !== repositories) {
+      localStorage.setItem("repositories", JSON.stringify(repositories));
+    }
+  }
 
   handleInputChange = (e) => {
     this.setState({ newRepo: e.target.value });
@@ -73,7 +91,16 @@ export default class Main extends Component {
           {repositories.map((repository) => (
             <li key={repository.name}>
               <span>{repository.name}</span>
-              <a href="">Detalhes</a>
+              <Link
+                to={{
+                  pathname: `/repository/${encodeURIComponent(
+                    repository.name
+                  )}`,
+                  state: { stateParam: true },
+                }}
+              >
+                Detalhes
+              </Link>
             </li>
           ))}
         </List>
