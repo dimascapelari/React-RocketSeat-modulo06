@@ -7,7 +7,7 @@ function Repository(props) {
 
   const { repository } = useParams();
 
-  console.log("1", repository);
+  //console.log("1", repository);
 
   return <h1>Repository: {repository} </h1>;
 }
